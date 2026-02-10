@@ -102,4 +102,4 @@ Instead of expensive sensors, consider:
 - **Visual Odometry** instead of wheel encoders
 - **Software-based SLAM** instead of LiDAR
 - **Open-source models** instead of paid APIs
-- **Edge AI** (run locally) instead of cloud AI
+
