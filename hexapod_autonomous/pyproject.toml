@@ -1,0 +1,41 @@
+[buildsystem]
+requires = ["ament_python"]
+build-type = "ament_python"
+
+[project]
+name = "hexapod_autonomous"
+version = "0.1.0"
+description = "Autonomous Hexapod Robot System with ROS2"
+requires-python = ">=3.8"
+dependencies = [
+    "rclpy",
+    "sensor_msgs",
+    "geometry_msgs",
+    "nav_msgs",
+    "std_msgs",
+    "cv_bridge",
+    "tf2_ros",
+    "tf2_geometry_msgs",
+]
+
+[project.scripts]
+hexapod_bringup = "hexapod_autonomous.hexapod_bringup.main:main"
+hexapod_control = "hexapod_autonomous.hexapod_control.servo_controller:main"
+hexapod_gait = "hexapod_autonomous.hexapod_control.gait_controller:main"
+hexapod_vision = "hexapod_autonomous.hexapod_vision.camera_node:main"
+hexapod_object_detect = "hexapod_autonomous.hexapod_vision.object_detector:main"
+hexapod_lidar = "hexapod_autonomous.hexapod_perception.lidar_node:main"
+hexapod_ultrasonic = "hexapod_autonomous.hexapod_perception.ultrasonic_node:main"
+hexapod_navigation = "hexapod_autonomous.hexapod_navigation.navigator:main"
+hexapod_voice = "hexapod_autonomous.hexapod_ai.voice_node:main"
+hexapod_ai_brain = "hexapod_autonomous.hexapod_ai.ai_brain:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["hexapod_autonomous*"]
+
+[tool.setuptools.package-data]
+"hexapod_autonomous" = ["launch/**/*.py", "config/**/*.yaml", "urdf/**/*.urdf"]
+
+[ament_cmake_python]
+install_scripts = ["scripts/*"]

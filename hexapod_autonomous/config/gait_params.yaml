@@ -1,0 +1,31 @@
+gait_parameters:
+  step_period: 0.2
+  stride_length: 30
+  step_height: 20
+  leg_length: 100
+
+gait_modes:
+  tripod:
+    group1: [front_right, rear_left, middle_left]
+    group2: [front_left, rear_right, middle_right]
+    sequence: [lift, forward, lower, back]
+  
+  wave:
+    sequence: [front_left, middle_left, rear_left, rear_right, middle_right, front_right]
+  
+  ripple:
+    group1: [front_left, rear_right]
+    group2: [middle_left, middle_right]
+    group3: [rear_left, front_right]
+
+default_gait: tripod
+transition_time: 0.5
+
+adaptive_parameters:
+  terrain_adaptive: false
+  slope_compensation: false
+  load_balancing: false
+
+smooth_gait:
+  enabled: true
+  interpolation_steps: 10

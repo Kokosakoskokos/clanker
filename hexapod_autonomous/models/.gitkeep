@@ -1,0 +1,6 @@
+# This directory is for storing ML models
+# Models will be automatically downloaded on first run
+# You can also place custom models here:
+# - YOLO models (*.pt, *.onnx)
+# - Custom trained models
+# - Pre-trained weights

@@ -1,0 +1,72 @@
+pca9685:
+  - i2c_address: 0x40
+    channels: 16
+  - i2c_address: 0x41
+    channels: 16
+
+servos:
+  front_right:
+    coxa: 0
+    femur: 1
+    tibia: 2
+  middle_right:
+    coxa: 4
+    femur: 5
+    tibia: 6
+  rear_right:
+    coxa: 8
+    femur: 9
+    tibia: 10
+  front_left:
+    coxa: 3
+    femur: 15
+    tibia: 14
+  middle_left:
+    coxa: 7
+    femur: 12
+    tibia: 13
+  rear_left:
+    coxa: 11
+    femur: 8
+    tibia: 9
+
+neutral_positions:
+  coxa: 90
+  femur: 90
+  tibia: 90
+
+servo_type: MG995
+
+mg995_parameters:
+  min_pulse: 1000
+  max_pulse: 2000
+  min_angle: 0
+  max_angle: 180
+  max_speed: 0.15
+  stall_current: 2.0
+  operating_voltage: 6.0
+
+servo_limits:
+  min_angle: 20
+  max_angle: 160
+  speed: 0.15
+  smooth_steps: 10
+
+servo_limits_per_joint:
+  coxa:
+    min_angle: 30
+    max_angle: 150
+    neutral: 90
+  femur:
+    min_angle: 40
+    max_angle: 140
+    neutral: 90
+  tibia:
+    min_angle: 30
+    max_angle: 120
+    neutral: 90
+
+neutral_positions:
+  coxa: 90
+  femur: 90
+  tibia: 90

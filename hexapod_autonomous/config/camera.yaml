@@ -1,0 +1,41 @@
+camera:
+  camera_index: 0
+  width: 640
+  height: 480
+  fps: 30
+  frame_id: camera_link
+
+object_detection:
+  model_path: models/yolov5s.pt
+  conf_threshold: 0.5
+  iou_threshold: 0.45
+  device: cpu
+  classes:
+    - person
+    - cup
+    - bottle
+    - chair
+    - dog
+    - cat
+    - ball
+
+face_detection:
+  enabled: true
+  model: opencv_haar
+  haar_cascade_path: "models/haarcascade_frontalface_default.xml"
+  confidence_threshold: 0.8
+  min_face_size: 50
+  max_faces: 5
+
+face_recognition:
+  enabled: true
+  encoding_model: dlib
+  face_landmark_model: models/shape_predictor_68_face_landmarks.dat
+  face_recognition_model: models/dlib_face_recognition_resnet_model_v1.dat
+  tolerance: 0.6
+
+person_tracking:
+  enabled: true
+  tracking_method: centroid
+  max_distance: 100
+  lost_threshold: 30

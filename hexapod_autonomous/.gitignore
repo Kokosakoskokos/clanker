@@ -1,0 +1,44 @@
+.git/
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ROS2
+build/
+install/
+log/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python
+*.egg-info/
+dist/
+.venv/
+venv/
+
+# Logs
+*.log
+
+# Models
+models/*.pt
+models/*.pth
+models/*.onnx
+!models/.gitkeep
+
+# Config with secrets
+config/secrets.yaml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary
+tmp/
+temp/
+*.tmp

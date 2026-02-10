@@ -1,0 +1,45 @@
+ai:
+  llm:
+    provider: openrouter
+    model: mistralai/mistral-7b-instruct:free
+    temperature: 0.7
+    max_tokens: 150
+    base_url: https://openrouter.ai/api/v1
+
+openrouter:
+  api_key_env: OPENROUTER_API_KEY
+  app_name: Hexapod Robot
+  site_url: https://github.com/Kokosakoskokos/robot
+
+voice:
+  voice_rate: 150
+  voice_volume: 0.8
+  language: cs-CZ
+  keyword: robot
+  wake_word_timeout: 3.0
+  voice_engine: espeak
+  espeak_voice: cs
+  czech_phrases:
+    greeting: "Ahoj, jsem připraven k průzkumu."
+    goodbye: "Nashledanou, příště."
+    following: "Sleduji tě."
+    lost: "Ztratil jsem tě z dohledu."
+    found: "Našel jsem tě."
+    obstacle: "Mám překážku."
+    error: "Nastala chyba."
+    stop: "Zastavuji se."
+
+behavior:
+  default_mode: autonomous
+  response_delay: 0.5
+  confidence_threshold: 0.7
+
+learning:
+  enabled: false
+  save_experiences: false
+  replay_buffer_size: 10000
+
+personality:
+  name: Hexapod
+  greeting: "Hello, I'm ready to explore."
+  goodbye: "Goodbye, see you next time."
