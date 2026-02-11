@@ -20,6 +20,21 @@ else
     exit 1
 fi
 
+# Set workspace directory
+CLANKER_DIR="$HOME/clanker"
+INSTALLER_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# If running from GitHub URL, need to clone first
+if [[ "$INSTALLER_DIR" != "$CLANKER_DIR" ]]; then
+    echo "Cloning Clanker repository to $CLANKER_DIR..."
+    rm -rf "$CLANKER_DIR"
+    git clone https://github.com/Kokosakoskokos/clanker.git "$CLANKER_DIR"
+    cd "$CLANKER_DIR"
+else
+    echo "Already in Clanker directory"
+    cd "$CLANKER_DIR"
+fi
+
 # 1. Update System
 echo "Updating system packages..."
 sudo apt update && sudo apt upgrade -y
