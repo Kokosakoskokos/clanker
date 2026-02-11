@@ -20,6 +20,35 @@ else
     exit 1
 fi
 
+# Check if OS is compatible with ROS2 Humble
+if [ "$OS_ID" = "debian" ] && [ "$VERSION_ID" = "13" ]; then
+    echo ""
+    echo "WARNING: Debian 13 (Trixie) is not compatible with ROS2 Humble."
+    echo "ROS2 Humble requires Python 3.10, but Debian 13 has a newer version."
+    echo ""
+    echo "Options:"
+    echo "1. Install Ubuntu 22.04 LTS (recommended)"
+    echo "2. Use Docker to run ROS2 Humble in a container"
+    echo ""
+    echo "Attempting Docker-based installation..."
+    
+    if ! command -v docker &> /dev/null; then
+        echo "Docker is not installed. Installing Docker..."
+        curl -fsSL https://get.docker.com | sh
+        sudo usermod -aG docker $USER
+        echo "Docker installed. Please log out and log back in, then run this script again."
+        exit 0
+    fi
+    
+    USE_DOCKER=true
+elif [ "$OS_ID" = "debian" ] && [ "$VERSION_ID" = "12" ]; then
+    # Debian 12 (Bookworm) should work with adjustments
+    echo "Debian 12 detected. Installing ROS2 Humble with adjustments..."
+    USE_DOCKER=false
+else
+    USE_DOCKER=false
+fi
+
 # Set workspace directory
 CLANKER_DIR="$HOME/clanker"
 INSTALLER_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -40,7 +69,30 @@ echo "Updating system packages..."
 sudo apt update && sudo apt upgrade -y
 
 # 2. Install ROS2 Humble (if not installed)
-if ! command -v ros2 &> /dev/null; then
+if [ "$USE_DOCKER" = "true" ]; then
+    echo "Using Docker-based ROS2 Humble installation..."
+    
+    # Pull ROS2 Humble Docker image
+    sudo docker pull ros:humble-ros-base
+    
+    # Create Docker launch script
+    cat > "$CLANKER_DIR/docker-launch.sh" << 'EOF'
+#!/bin/bash
+docker run -it \
+    --network host \
+    --privileged \
+    -v /dev:/dev \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -e DISPLAY=$DISPLAY \
+    -e OPENROUTER_API_KEY=$OPENROUTER_API_KEY \
+    ros:humble-ros-base \
+    /bin/bash
+EOF
+    chmod +x "$CLANKER_DIR/docker-launch.sh"
+    
+    echo "Docker setup complete!"
+    
+elif ! command -v ros2 &> /dev/null; then
     echo "ROS2 not found. Installing ROS2 Humble..."
 
     if [ "$OS_ID" = "ubuntu" ] && [ "$OS_VERSION" = "22.04" ]; then
@@ -136,21 +188,40 @@ if command -v raspi-config &> /dev/null; then
 fi
 
 # 8. Setup Workspace
-echo "Building the workspace..."
-colcon build --symlink-install --packages-select hexapod_autonomous
+if [ "$USE_DOCKER" = "true" ]; then
+    echo ""
+    echo "=========================================="
+    echo "    Docker Installation Complete!         "
+    echo "=========================================="
+    echo ""
+    echo "To use Clanker in Docker:"
+    echo "  cd ~/clanker"
+    echo "  ./docker-launch.sh"
+    echo ""
+    echo "Then inside Docker container:"
+    echo "  cd /clanker"
+    echo "  colcon build --symlink-install --packages-select hexapod_autonomous"
+    echo "  source /opt/ros/humble/setup.bash"
+    echo "  source install/setup.bash"
+    echo "  ros2 launch hexapod_autonomous hexapod_full.launch.py"
+    echo ""
+else
+    echo "Building the workspace..."
+    colcon build --symlink-install --packages-select hexapod_autonomous
 
-echo ""
-echo "=========================================="
-echo "         Installation Complete!           "
-echo "=========================================="
-echo ""
-echo "Please add the following to your ~/.bashrc:"
-echo "  source /opt/ros/humble/setup.bash"
-echo "  source ~/clanker/install/setup.bash"
-echo ""
-echo "Don't forget to set your OpenRouter API Key:"
-echo "  export OPENROUTER_API_KEY='your_key_here'"
-echo ""
-echo "To start Clanker:"
-echo "  ros2 launch hexapod_autonomous hexapod_full.launch.py"
-echo ""
+    echo ""
+    echo "=========================================="
+    echo "         Installation Complete!           "
+    echo "=========================================="
+    echo ""
+    echo "Please add the following to your ~/.bashrc:"
+    echo "  source /opt/ros/humble/setup.bash"
+    echo "  source ~/clanker/install/setup.bash"
+    echo ""
+    echo "Don't forget to set your OpenRouter API Key:"
+    echo "  export OPENROUTER_API_KEY='your_key_here'"
+    echo ""
+    echo "To start Clanker:"
+    echo "  ros2 launch hexapod_autonomous hexapod_full.launch.py"
+    echo ""
+fi
